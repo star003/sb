@@ -1,0 +1,3 @@
+ -Xms64m -Xmx800m
+iexplore
+iexplore.jar,core.jar

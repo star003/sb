@@ -1,0 +1,3 @@
+ -Xms64m -Xmx800m
+miniPrognoz
+miniPrognoz.jar,core.jar

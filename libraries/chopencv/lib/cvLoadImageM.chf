@@ -1,0 +1,12 @@
+CvMat* cvLoadImageM(char* filename, int iscolor) {
+    void *fptr;
+    CvMat*retval;
+
+    fptr = dlsym(_Chhighgui_handle, "cvLoadImageM_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return NULL;
+    }
+    dlrunfun(fptr, &retval, cvLoadImageM, filename, iscolor);
+    return retval;
+}

@@ -1,0 +1,3 @@
+ -Xms64m -Xmx800m
+HomeDshBoard
+HomeDshBoard.jar,core.jar,net.jar

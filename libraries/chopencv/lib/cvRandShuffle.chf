@@ -1,0 +1,10 @@
+void cvRandShuffle(CvArr* mat, CvRNG* rng, double iter_factor) {
+    void *fptr;
+
+    fptr = dlsym(_Chcv_handle, "cvRandShuffle_chdl");
+    if(fptr == NULL) {
+        fprintf(_stderr, "Error: %s(): dlsym(): %s\n", __func__,  dlerror());
+        return;
+    }
+    dlrunfun(fptr, NULL, cvRandShuffle, mat, rng, iter_factor);
+}
