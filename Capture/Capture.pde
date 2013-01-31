@@ -13,6 +13,7 @@ float sizeFactor=3.5;
 
 void setup() {
   size(640,480);
+  background(1);
   cam = new IPCapture(this, "http://192.168.100.176:8080/?action=stream", "", "");
   cam.start();
   opencv = new OpenCV( this );
@@ -22,6 +23,7 @@ void setup() {
 }
 
 void draw() {
+
   if (cam.isAvailable()) {
     cam.read();
 	prevFrame = cam.get(0,0,width,height);
@@ -36,6 +38,8 @@ void draw() {
     stroke(255,0,0);
 	
     for( int i=0; i<faces.length; i++ ) {
+	background(1);
+	
       //opencv.ROI( faces[i].x, faces[i].y, faces[i].x+faces[i].width, faces[i].y+faces[i].height );
       //opencv.copy(opencv.image(),faces[i].x, faces[i].y, faces[i].width, faces[i].height,faces[i].x, faces[i].y, faces[i].width, faces[i].height);
        n++;
@@ -43,11 +47,21 @@ void draw() {
 	   //image(opencv.image(), 0,0); 
 	   tek = cam.get(faces[i].x,faces[i].y,faces[i].width,faces[i].height);
 	   //image(tek,0,0);
-       tek.save("e:\\cap\\"+n+".jpg");            
+	   int d = day();
+	   int m = month();
+	   int y = year();
+	   int mn= minute();
+	   int h = hour();
+	   int s = second();
+	   String st= str(y)+"-"+str(m)+"-"+str(d)+"_"+str(h)+"-"+str(m)+"-"+str(s)+"_"+str(n);
+       tek.save("e:\\cap\\"+st+".jpg");            
        rect( faces[i].x-40, faces[i].y-40, faces[i].width+60, faces[i].height+60 ); 
 	   tek = null;
+	   //text(str(n),10,300);
+	   
     }
     //image(cam,0,0);
+	
   }
 }
 
