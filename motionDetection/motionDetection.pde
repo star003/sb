@@ -1,50 +1,75 @@
 import ipcapture.*;
-import hypermedia.video.*;
-import java.awt.Rectangle;
-
-OpenCV opencv;
-
-IPCapture cam;
-PImage prevFrame,tek,cr;
-long n = 0;
-long x1 = 20;
-boolean ps = false;
-float sizeFactor=3.5;
-
+	PFont f;
+	IPCapture cam;
+	PImage prevFrame,tek,cur;
+	int g	=0;
+	float threshold = 20;
+	float diff;
+	float br=0;
+	float br1=0;
 void setup() {
-  size(640,480);
+  size(640,550);
   background(1);
   cam = new IPCapture(this, "http://192.168.100.176:8080/?action=stream", "", "");
   cam.start();
-  opencv = new OpenCV( this );
-  opencv.loadImage("e:\\_3.jpg");
-  opencv.cascade( "C:\\Program Files\\OpenCV\\data\\haarcascades\\haarcascade_frontalface_alt.xml" );  
-  
+  prevFrame = createImage(cam.width,cam.height,RGB);
+  tek 		= createImage(cam.width,cam.height,RGB);
+  f = loadFont( "Courier-12.vlw" );
+  textFont(f,24);
 }
 
 void draw() {
-
   if (cam.isAvailable()) {
-    cam.read();
-	image( cam, 0, 0 );
-//	   tek = cam.get(faces[i].x,faces[i].y,faces[i].width,faces[i].height);
-	   int d = day();
-	   int m = month();
-	   int y = year();
-	   int mn= minute();
-	   int h = hour();
-	   int s = second();
-//	   String st= str(y)+"-"+str(m)+"-"+str(d)+"_"+str(h)+"-"+str(m)+"-"+str(s)+"_"+str(n);
- //     tek.save("e:\\cap\\"+st+".jpg");            
-	   tek = null;
-	   
+		if (cam.width > 0) {
+			prevFrame 	= cam.get(0,0,cam.width,cam.height); 
+			cam.read();
+			tek 		= cam.get(0,0,cam.width,cam.height); 
+		}
+		else {
+			cam.read();
+			tek 		= cam.get(0,0,cam.width,cam.height); 
+			prevFrame 	= tek;
+		}
+		
+	for (int i = 0; i < tek.pixels.length; i++) {
+		float r1 = red(tek.pixels[i]); 
+		float g1 = green(tek.pixels[i]); 
+		float b1 = blue(tek.pixels[i]);
+		
+		float r2 = red(prevFrame.pixels[i]); 
+		float g2 = green(prevFrame.pixels[i]); 
+		float b2 = blue(prevFrame.pixels[i]);
+		br 	+= brightness(tek.pixels[i]);
+		diff 	= dist(r1,g1,b1,r2,g2,b2);
+			if  (abs(diff)>threshold) g=255;
+			else g = 0;
     }
-  }
+		br1 = br/tek.pixels.length;
+		if (g > 0 ) {
+			background(0);
+			image(tek,0,0,320,240);
+			text(st()+" "+diff+" br "+br1,10,510);
+			//tek.save("e:\\cap\\guard\\"+st()+".jpg");
+		}
+	}
+	prevFrame 	= null;
+	tek			= null;
+	br = 0;
+}
 
-
+/*
 void keyPressed() {
   if (key == ' ') {
     if (cam.isAlive()) cam.stop();
     else cam.start();
   }
 }
+*/
+
+String st() {
+   return str(year())+"-"+str(month())+"-"
+		+str(day())+"_"+str(hour())+"-"
+		+str(minute())+"-"+str(second());
+}
+
+
