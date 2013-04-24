@@ -1,0 +1,3 @@
+delete from vk;
+delete from link;
+delete from log;
