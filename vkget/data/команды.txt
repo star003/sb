@@ -1,3 +1,28 @@
 delete from vk;
 delete from link;
+delete from dulink;
+
 delete from log;
+select * from link WHERE level = '2' and puid ='2079268' and cuid = '914239'
+
+//шаг 1 сольем повторения
+
+INSERT INTO dulink ( puid, cuid, [level] )
+SELECT link.puid, link.cuid, link.level
+FROM link
+GROUP BY link.puid, link.cuid, link.level;
+
+//шаг 2 очистим источник
+
+delete from link;
+
+//шаг 3 зальем без повторений
+
+INSERT INTO link ( puid, cuid, [level] )
+SELECT dulink.puid, dulink.cuid, dulink.level
+FROM dulink;
+
+//шаг 4 очистим буфер
+
+delete from dulink;
+

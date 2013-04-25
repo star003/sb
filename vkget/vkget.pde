@@ -268,8 +268,10 @@ void log(SQLite db,String mes){
  //**************************
  //**занесем в БД связи		*	
  //**************************
- 
+ try {
  if(uid.length()>3 & puid.length()>3) db.query( "INSERT INTO link (level,puid,cuid) VALUES ('"+level+"','"+puid+"','"+uid+"');");
+ }
+ catch (Exception e) {}
  } //insCP(SQLite db,String level,String uid,String puid)
  
  boolean uidExist(SQLite db,String uid){
